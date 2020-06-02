@@ -4,6 +4,8 @@
 void ofApp::setup() {
     const float radius = 200;
 
+    ofEnableAntiAliasing();
+
     for (int i = 0; i < 32 ; i++ ) {
         const auto x = getx( 512, radius, i * step); //sin( i * step ) * 512 + 512;
         const auto y = gety( 334, radius, i * step );
@@ -18,9 +20,13 @@ void ofApp::update() {
 
     // add ofpolyline
 
-    auto org = ofVec2f( sin( ofGetElapsedTimef() ) * 512 + 512, sin( ofGetElapsedTimef() ) * 334 + 334 );
+    auto org = ofVec2f(
+                getx( 512, 400, ofGetElapsedTimef() * 1.618 ),
+                gety( 334, 200, ofGetElapsedTimef() * 2.349 ));
     // auto org = ofVec2f( 512, 334 );
-    const auto org2 = ofVec2f( 512, 334 );
+    const auto org2 =  ofVec2f(
+                getx( 512, 400, ofGetElapsedTimef() * 0.2 ),
+                gety( 334, 200, ofGetElapsedTimef() * 2 ));
     const float radius = 200;
 
     for (int i = 0; i < 32 ; i++ ) {
