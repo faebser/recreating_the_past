@@ -9,7 +9,7 @@ int main( ) {
     // settings.setGLVersion(3,2);
     settings.resizable = false;
     settings.decorated = false;
-    settings.setSize(1024, 768);
+    settings.setSize(2048, 1536);
     ofCreateWindow(settings);
 
     // this kicks off the running of my app

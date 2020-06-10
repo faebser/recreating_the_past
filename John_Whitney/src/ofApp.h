@@ -1,8 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 
     public:
         void setup();
@@ -27,4 +28,16 @@ class ofApp : public ofBaseApp{
         const float step = PI / 32;
         float getx ( float origin, float radius, float angle );
         float gety ( float origin, float radius, float angle );
+
+        ofxPanel general;
+        ofxPanel circleA;
+        ofxPanel circleB;
+        ofParameter< int > blend;
+        ofParameter< float > radiusA;
+        ofParameter< float > scaleXA;
+        ofParameter< float > scaleYA;
+
+        ofParameter< float > radiusB;
+        ofParameter< float > scaleXB;
+        ofParameter< float > scaleYB;
 };

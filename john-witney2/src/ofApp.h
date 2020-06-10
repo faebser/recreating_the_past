@@ -1,0 +1,34 @@
+#pragma once
+#include "ofMain.h"
+#include "ofVbo.h"
+
+#define NUM_BILLBOARDS 100
+
+class ofApp : public ofBaseApp {
+    public:
+        void setup();
+        void update();
+        void draw();
+
+        void keyPressed(int key);
+        void keyReleased(int key);
+        void mouseMoved(int x, int y );
+        void mouseDragged(int x, int y, int button);
+        void mousePressed(int x, int y, int button);
+        void mouseReleased(int x, int y, int button);
+        void mouseEntered(int x, int y);
+        void mouseExited(int x, int y);
+        void windowResized(int w, int h);
+        void dragEvent(ofDragInfo dragInfo);
+        void gotMessage(ofMessage msg);
+
+        ofVbo vbo;
+        ofShader shader;
+        ofImage texture;
+        glm::vec2 pos[NUM_BILLBOARDS];
+        glm::vec2 vel[NUM_BILLBOARDS];
+        glm::vec2 home[NUM_BILLBOARDS]; // x is radius, y is angle
+        glm::vec2 rAandAngle[NUM_BILLBOARDS];
+        float pointSizes[NUM_BILLBOARDS];
+        float rotations[NUM_BILLBOARDS];
+};
