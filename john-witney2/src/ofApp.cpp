@@ -7,21 +7,31 @@ void ofApp::setup() {
 
     // billboard particles
 
-    glm::vec2 center( ofGetWidth(), ofGetHeight() );
+    center = glm::vec2( ofGetWidth() * 0.5, ofGetHeight() * 0.5 );
     const float radius = 200;
+    const float radd = NUM_BILLBOARDS / 100;
+    const float add = TWO_PI / radd;
+    const float addd = (radius_max - radius_min) / 100;
 
     for ( int i = 0; i < NUM_BILLBOARDS; i++ ) {
-        rAandAngle[ i ].x = radius;
-        rAandAngle[ i ].y = i * 0.36;
+
+        int j = i / radd;
+
+        cout << i << " " << j <<  " " << addd << endl;
+
+        rAandAngle[ i ].x = radius_min + j * addd;
+
+        cout << rAandAngle[ i ].x << endl;
+
+        rAandAngle[ i ].y = i * add + i * 0.1;
         pos[ i ].x = center.x + rAandAngle[ i ].x * cos( rAandAngle[ i ].y );
         pos[ i ].y = center.y + rAandAngle[ i ].x * sin( rAandAngle[ i ].y );
 
-        // pos[i].x = ofRandomWidth();
-        // pos[i].y = ofRandomHeight();
+
         vel[i].x = ofRandomf();
         vel[i].y = ofRandomf();
         home[i] = pos[i];
-        pointSizes[i] = ofRandom(2, 40);
+        pointSizes[i] = 20;
         rotations[i] = ofRandom(0, 360);
     }
 
@@ -51,12 +61,25 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    glm::vec2 mouse(ofGetMouseX(), ofGetMouseY());
-    glm::vec2 mouseVec(ofGetPreviousMouseX()-ofGetMouseX(), ofGetPreviousMouseY()-ofGetMouseY());
-    glm::clamp(mouseVec, 0.0f, 10.0f);
+//    glm::vec2 mouse(ofGetMouseX(), ofGetMouseY());
+//    glm::vec2 mouseVec(ofGetPreviousMouseX()-ofGetMouseX(), ofGetPreviousMouseY()-ofGetMouseY());
+//    glm::clamp(mouseVec, 0.0f, 10.0f);
+
+    const float radd = (radius_max - radius_min) / NUM_BILLBOARDS;
+
+//    const float radd = NUM_BILLBOARDS / 100;
+//    const float add = TWO_PI / radd;
+//    const float addd = (radius_max - radius_min) / 100;
+
+    for ( int i = 0; i < NUM_BILLBOARDS; i++ ) {
+
+        float scale = ofMap( i, 0, NUM_BILLBOARDS, 0.01, 1 );
+        rAandAngle[ i ].x = ofMap( sin( ofGetElapsedTimef() * scale ), -1, 1, radius_min, radius_max );
+        rAandAngle[ i ].y += sin( ofGetElapsedTimef() ) * 0.001 + 0.002;
+        pos[ i ].x = center.x + rAandAngle[ i ].x * cos( rAandAngle[ i ].y );
+        pos[ i ].y = center.y + rAandAngle[ i ].x * sin( rAandAngle[ i ].y );
 
 
-    for (int i=0; i<NUM_BILLBOARDS; i++) {
 //        ofSeedRandom(i);
 //        if(glm::distance(mouse,pos[i]) < ofRandom(100, 200)) {
 //            vel[i] -= mouseVec;

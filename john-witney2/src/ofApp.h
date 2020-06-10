@@ -2,7 +2,7 @@
 #include "ofMain.h"
 #include "ofVbo.h"
 
-#define NUM_BILLBOARDS 100
+#define NUM_BILLBOARDS 5000
 
 class ofApp : public ofBaseApp {
     public:
@@ -28,6 +28,9 @@ class ofApp : public ofBaseApp {
         glm::vec2 pos[NUM_BILLBOARDS];
         glm::vec2 vel[NUM_BILLBOARDS];
         glm::vec2 home[NUM_BILLBOARDS]; // x is radius, y is angle
+        glm::vec2 center;
+        const float radius_min = 25;
+        const float radius_max = 1000;
         glm::vec2 rAandAngle[NUM_BILLBOARDS];
         float pointSizes[NUM_BILLBOARDS];
         float rotations[NUM_BILLBOARDS];
