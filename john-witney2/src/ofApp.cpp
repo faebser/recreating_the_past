@@ -23,7 +23,7 @@ void ofApp::setup() {
 
         cout << rAandAngle[ i ].x << endl;
 
-        rAandAngle[ i ].y = i * add + i * 0.1;
+        rAandAngle[ i ].y = i * add + i * 0.01;
         pos[ i ].x = center.x + rAandAngle[ i ].x * cos( rAandAngle[ i ].y );
         pos[ i ].y = center.y + rAandAngle[ i ].x * sin( rAandAngle[ i ].y );
 
@@ -75,7 +75,7 @@ void ofApp::update() {
 
         float scale = ofMap( i, 0, NUM_BILLBOARDS, 0.01, 1 );
         rAandAngle[ i ].x = ofMap( sin( ofGetElapsedTimef() * scale ), -1, 1, radius_min, radius_max );
-        rAandAngle[ i ].y += sin( ofGetElapsedTimef() ) * 0.001 + 0.002;
+        rAandAngle[ i ].y += 0.001; //sin( ofGetElapsedTimef() ) * 0.001 + 0.002;
         pos[ i ].x = center.x + rAandAngle[ i ].x * cos( rAandAngle[ i ].y );
         pos[ i ].y = center.y + rAandAngle[ i ].x * sin( rAandAngle[ i ].y );
 
