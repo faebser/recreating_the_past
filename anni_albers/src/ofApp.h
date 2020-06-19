@@ -2,11 +2,12 @@
 
 #include "ofMain.h"
 #include "screenshot.hpp"
+#include "tree.h"
 
 struct Node
 {
-    ofRectangle & rect;
-    ofFbo & fbo;
+    ofRectangle rect;
+    ofFbo fbo;
 };
 
 class ofApp : public ofBaseApp{
@@ -28,6 +29,8 @@ class ofApp : public ofBaseApp{
         void dragEvent(ofDragInfo dragInfo);
         void gotMessage(ofMessage msg);
 
+        void drawLines(ofRectangle rect, ofFbo fbo, bool direction);
+
         void take();
 
         ofFbo fbo;
@@ -39,6 +42,10 @@ class ofApp : public ofBaseApp{
         vector< ofFbo > fbos;
 
         glm::vec4 size;
+        tree< Node* > rectTree;
+        tree< Node* >::iterator top_it;
+
+        vector< Node > nodes;
 
 
         bool screen_taken = false;

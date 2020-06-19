@@ -8,7 +8,7 @@ void ofApp::setup(){
     // top, left, w, h
     size = glm::vec4( ofGetWidth() * 0.04, ofGetHeight() * 0.04, ofGetWidth() * 0.93, ofGetHeight() * 0.93 );
 
-    top = ofRectangle( ofGetWidth() * 0.04, ofGetHeight() * 0.04 + 30, ofGetWidth() * 0.93, ofGetHeight() * 0.93 - 30 );
+    top = ofRectangle( 0, 0, ofGetWidth() * 0.93, size.w - 60 );
 
     // borders
 //    top.y += 30;
@@ -30,10 +30,10 @@ void ofApp::setup(){
     // generate some rects
     // first top
     // the children of top all need to be inside of top
-    int max = ofRandom( 3, 6 );
+    // int max = ofRandom( 3, 6 );
     float space = top.height;
 
-    auto h = ofRandom(30, space);
+    auto h = ceil( ofRandom(30, space) ); // TODO this one is too big
     space -= h;
 
     auto r = ofRectangle( top.x, 0, top.width, h);
@@ -43,7 +43,7 @@ void ofApp::setup(){
     // while is maybe better
 
     while ( space > 30 ) {
-        h = ofRandom(30, space);
+        h = ceil( ofRandom(30, space) );
         //cout << "i: " << i << endl;
         space -= h;
         cout << "space: " << space << endl;
@@ -63,6 +63,9 @@ void ofApp::setup(){
         rects.push_back( r );
     }
 
+    // TODO write a recursive function
+    // that adds sub rects to the now created rects
+
     bool dir = true;
 
     for (auto r : rects ) {
@@ -70,39 +73,37 @@ void ofApp::setup(){
         f.allocate(r.width, r.height, GL_RGBA , 4);
         fbos.push_back( f );
 
-        // change direction
-        f.begin();
-            ofClear(0,0,0,255);
-            ofBackground( 208, 170, 111, 75 );
-            if ( dir ) {
-                for (int i = -r.height; i < r.width; i+=8) {
-                    ofSetColor(141, 25, 15);
-    //                if ( i % 2 == 0 ) {
-    //                    ofSetColor(141, 25, 14);
-    //                }
-    //                else {
-    //                    ofSetColor(255, 192, 164);
-    //                }
-                    ofDrawLine(0 + i,0, i + r.height, r.height );
-                }
-            }
-            else {
-               ofSetColor(141, 25, 15);
-                for (int i = 0; i < r.width + r.height ; i+=8) {
-                    ofDrawLine(0 + i,0, i - r.height, r.height );
-                }
-            }
-
-            dir = !dir;
-
-            ofClearAlpha();
-            ofFill();
-            ofSetColor(0,0,0,0);
-            ofDisableAlphaBlending();
-            //ofDrawRectangle(0,0,100,100);
-            ofEnableAlphaBlending();
-        f.end();
+        drawLines( r, f, dir );
+        dir = !dir;
     }
+
+    r = rects.at( 0 );
+
+    auto temp = ofRectangle(ofRandom(r.x, r.width), ofRandom(r.y, r.height), 100, 100);
+    auto f = fbos.at( 0 );
+
+    auto tempf = ofFbo();
+    tempf.allocate( temp.height, temp.width );
+
+    drawLines(temp, tempf, false );
+
+    f.begin();
+        ofClearAlpha();
+        ofFill();
+        ofSetColor(0,0,0,0);
+        ofDisableAlphaBlending();
+        ofDrawRectangle(temp);
+        ofEnableAlphaBlending();
+
+        ofSetColor(255, 192, 164);
+        tempf.draw( temp.x, temp.y );
+
+    f.end();
+
+//    top_it = rectTree.begin();
+//    auto n = Node{ top, ofFbo() };
+//    nodes.push_back( n );
+//    rectTree.insert(top_it, &n);
 
     // if remaining height is smaller than 100 we just add it to the last rect
     // otherwise we add another rect
@@ -111,6 +112,40 @@ void ofApp::setup(){
 //    cout << size.y << endl;
 //    cout << size.z << endl;
 //    cout << size.w << endl;
+}
+
+void ofApp::drawLines(ofRectangle rect, ofFbo fbo, bool direction) {
+
+    fbo.begin();
+        ofClear(0,0,0,255);
+        ofBackground( 208, 170, 111, 75 );
+        if ( direction ) {
+            for (int i = -rect.height; i < rect.width; i+=8) {
+                ofSetColor(141, 25, 15);
+//                if ( i % 2 == 0 ) {
+//                    ofSetColor(141, 25, 14);
+//                }
+//                else {
+//                    ofSetColor(255, 192, 164);
+//                }
+                ofDrawLine(0 + i,0, i + rect.height, rect.height );
+            }
+        }
+        else {
+           ofSetColor(141, 25, 15);
+            for (int i = 0; i < rect.width + rect.height ; i+=8) {
+                ofDrawLine(0 + i,0, i - rect.height, rect.height );
+            }
+        }
+
+
+//        ofClearAlpha();
+//        ofFill();
+//        ofSetColor(0,0,0,0);
+//        ofDisableAlphaBlending();
+//        //ofDrawRectangle(0,0,100,100);
+//        ofEnableAlphaBlending();
+    fbo.end();
 }
 
 //--------------------------------------------------------------
@@ -160,16 +195,19 @@ void ofApp::draw(){
 
     ofSetColor(255, 192, 164);
     //ofDrawRectangle( top );
-    fboBorder.draw( size.x, size.y );
-    fboBorder.draw( size.x, size.y + size.w );
+
 
     int bla = 0;
-    ofSetColor(255, 0, 0);
 
     ofPushMatrix();
-    ofTranslate(0, top.y);
+    ofTranslate( size.x, size.y );
+
+    fboBorder.draw( 0, 0 );
+    fboBorder.draw( 0, size.w - 30 );
 
     ofSetColor(255, 192, 164);
+
+    ofTranslate(0, 30);
 
     for (int i = 0; i < rects.size(); i++ ) {
         auto f = fbos.at( i );
@@ -255,8 +293,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::take() {
     ofImage image;
     image.grabScreen(0,0,ofGetWidth(),ofGetHeight());
-    string str = "images/devImgs/devImg";
-    str += ofToString(ofGetTimestampString()) + ".jpg";
+    string str = "images/devImgs/devImg" + ofToString(ofGetTimestampString()) + ".jpg";
     image.saveImage(str);
     std::cout << "screenshot taken" << endl;
 }
