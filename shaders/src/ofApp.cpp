@@ -45,6 +45,8 @@ void ofApp::draw(){
     cout << "finished first pass" << endl;
 
     //----------------------------------------------------------
+
+    // NOT USING THIS
     fboBlurTwoPass.begin();
 
     shaderBlurY.begin();
@@ -61,6 +63,12 @@ void ofApp::draw(){
     //fboBlurTwoPass.draw(0, 0);
 
     fboBlurOnePass.draw(0, 0);
+
+    ofSetColor( ofColor::red );
+
+    ofDrawLine( fboBlurTwoPass.getWidth(), 0, fboBlurTwoPass.getWidth() ,fboBlurTwoPass.getHeight() );
+
+    ofSetColor( ofColor::white );
 
     init.draw( fboBlurTwoPass.getWidth(), 0 );
 
