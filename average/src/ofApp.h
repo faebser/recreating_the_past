@@ -2,12 +2,20 @@
 
 #include "ofMain.h"
 #include "ofxPoissonDiskSampling.h"
+#include "particle.h"
 
 class imageWithData {
 
     public:
         ofImage img;
+        float hue;
+        ofColor c;
+};
 
+class pointWithColor {
+    public:
+        ofVec2f vec;
+        ofColor c;
 };
 
 
@@ -35,6 +43,17 @@ class ofApp : public ofBaseApp{
         float m_density;
         ofVec2f center;
 
-        vector< ofImage > images;
+        ofFbo f;
+
+        vector< imageWithData > images;
+        vector< pointWithColor > points;
+        vector< particle > particles;
         ofImage average;
+
+        ofMesh mesh;
+        ofShader mask;
+
+        ofFbo background, gradient, bg_gradient, circles, finalFbo;
+
+        int height = 500;
 };

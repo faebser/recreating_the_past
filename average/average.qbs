@@ -12,13 +12,21 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "bin/data/shadersGL3/mask.frag",
+            "bin/data/shadersGL3/mask.vert",
+            "bin/data/shadersGL3/shaderBlurX.frag",
+            "bin/data/shadersGL3/shaderBlurX.vert",
+            "bin/data/shadersGL3/shaderBlurY.frag",
+            "bin/data/shadersGL3/shaderBlurY.vert",
+            "src/particle.cpp",
+            "src/particle.h",
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',
         ]
 
         of.addons: [
-
+            'ofxPoissonDiskSampling'
         ]
 
         // additional flags for the project. the of module sets some
